@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 MATCH_STORE_LIMIT = 25
+TEST_STORE_LIMIT = 5
 
 # Application definition
 
