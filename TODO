@@ -1,0 +1,2 @@
+x. add field 'opendota verified' to model user which is a BooleanField that explains if the user has registered with opendota or not,
+as parsing can only begin after they've verified with opendota.
