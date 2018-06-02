@@ -26,7 +26,7 @@ SECRET_KEY = data.secret_key
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+MATCH_STORE_LIMIT = 25
 
 # Application definition
 
@@ -140,7 +140,7 @@ STATIC_URL = '/static/'
 # Social auth settings
 # Besides the following, changes were made to AUTHENTICATION_BACKENDS, TEMPLATES and INSTALLED_APPS
 
-# Provide the api-key here
+
 SOCIAL_AUTH_STEAM_API_KEY = data.steam_key
 # Fetch extra information about the user from the steam web api
 SOCIAL_AUTH_STEAM_EXTRA_DATA = ['player']
@@ -148,6 +148,7 @@ SOCIAL_AUTH_STEAM_EXTRA_DATA = ['player']
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
+DOTA_API_URL = 'https://api.opendota.com/api/'
 AUTH_USER_MODEL = 'authentication.User'
 SOCIAL_AUTH_USER_MODEL = 'authentication.User'
 
