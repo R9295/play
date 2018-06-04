@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'huey.contrib.djhuey',
     'social_django',
     'authentication',
     'play',
@@ -202,3 +203,13 @@ SOCIAL_AUTH_PIPELINE = (
     # Use a custom function for this, since the details are provided separately
     'authentication.pipeline.user_details',
 )
+# HUEY config
+HUEY = {
+    'name': 'play',
+    'always_eager': False,
+    'consumer': {
+        'workers': 2,
+        'scheduler_interval': 2,
+    },
+
+}

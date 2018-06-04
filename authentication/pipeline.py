@@ -1,5 +1,7 @@
 from authentication.models import User
 import requests
+from matches.tasks import update_matches
+from django.conf import settings
 
 
 def get_username(strategy, uid, user=None, *args, **kwargs):
@@ -43,10 +45,11 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
 
     # send request to see if signed up with opendota
     user = strategy.create_user(**fields)
-    request = requests.get(DOTA_API_URL+'/players/'+str(user.dotaid).json()
+    request = requests.get(settings.DOTA_API_URL+'/players/'+str(user.dotaid)).json()
     if 'profile' in request:
         user.opendota_verified = True
         user.save()
+        update_matches(str(user.pk))
 
     return {
         'is_new': True,
