@@ -2,7 +2,7 @@ import requests
 from .models import Match
 from django.utils.timezone import now
 from django.conf import settings
-from .rules import GameModeRules
+from .rules import GameModeRules, get_hero
 
 
 player_field_list = [
@@ -59,7 +59,8 @@ class MatchObj(object):
 
     def parse_dota_api_ids(self):
         self.data['game_mode'] = GameModeRules.get(self.data['game_mode'])
-
+        self.user_data['hero'] = get_hero(self.user_data['hero_id'])
+        self.user_data.pop('hero_id')
     def parse_user_win(self):
         if self.data['user_data'].get('isRadiant') == True and self.data['radiant_win'] == True:
             self.data['user_win'] = True
