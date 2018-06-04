@@ -11,8 +11,9 @@ def update_matches(user_pk):
     parser = MatchParser(user=user, store_limit=settings.MATCH_STORE_LIMIT)
     parser.get_matches()
     parser.parse_and_save()
-    print('saved: '+ str(parser.total_parsed))
-#    call_command('update_matches', user_pk)
+    parser.clear_old_matches()
+    print('parsed and saved: '+ str(parser.total_parsed))
+    print('deleted: '+ str(parser.total_deleted))
     return True
 
 #@periodic_task(crontab(minute='0', hour='5'))

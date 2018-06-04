@@ -122,3 +122,18 @@ class MatchParser(object):
             }
             parsed_data = MatchObj(data=data)
             parsed_data.save()
+
+    def clear_old_matches(self):
+        if self.latest_match_id != None:
+            matches = Match.objects.filter(user=user, time_stamp__lt=now())
+            count = matches.count()
+            matches = list(matches)
+            matches.reverse()
+            if len(matches) > settings.MATCH_STORE_LIMIT:
+                for a in matches:
+                    if count != MATCH_STORE_LIMIT:
+                        a.delete()
+                        count = count - 1
+                    else:
+                        self.total_deleted = count
+                        break
