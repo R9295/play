@@ -1,4 +1,5 @@
 from authentication.models import User
+import requests
 
 
 def get_username(strategy, uid, user=None, *args, **kwargs):
@@ -30,6 +31,27 @@ def user_details(user, details, strategy, *args, **kwargs):
 
         if changed:
             strategy.storage.user.changed(user)
+
+def create_user(strategy, details, backend, user=None, *args, **kwargs):
+    if user:
+        return {'is_new': False}
+
+    fields = dict((name, kwargs.get(name, details.get(name)))
+                  for name in backend.setting('USER_FIELDS', ['username', 'email']))
+    if not fields:
+        return
+
+    # send request to see if signed up with opendota
+    user = strategy.create_user(**fields)
+    request = requests.get(DOTA_API_URL+'/players/'+str(user.dotaid).json()
+    if 'profile' in request:
+        user.opendota_verified = True
+        user.save()
+
+    return {
+        'is_new': True,
+        'user': user
+    }
 
 
 def associate_existing_user(uid, *args, **kwargs):

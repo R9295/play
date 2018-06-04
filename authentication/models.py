@@ -52,6 +52,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     last_login = models.DateTimeField(default=timezone.now)
     is_superuser = models.BooleanField(default=False)
+    opendota_verified = models.BooleanField(default=False)
     objects = UserManager()
 
     def get_short_name(self):
