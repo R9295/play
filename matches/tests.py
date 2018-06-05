@@ -18,10 +18,24 @@ class MatchTestCase(TestCase):
         parser = MatchParser(user=self.user,store_limit=settings.TEST_STORE_LIMIT)
         self.assertEqual(parser.latest_match_id, None)
 
-    #@skip
+    @skip
     def test_get_matches(self):
         parser = MatchParser(user=self.user,store_limit=settings.TEST_STORE_LIMIT)
         parser.get_matches()
         self.assertEqual(len(parser.matches), 5)
         parser.parse_and_save()
         self.assertEqual(Match.objects.filter(user=self.user).count(), 5)
+
+    def test_clear_old_matches(self):
+        parser = MatchParser(user=self.user,store_limit=settings.TEST_STORE_LIMIT + 1)
+        parser.get_matches()
+        parser.parse_and_save()
+        # get the oldest parsed match
+        match = Match.objects.filter(user=self.user, time_stamp__lt=now())
+        match = match[5]
+        # initialise parser with new setting with new store limit (5) thus deleting the one leftover
+        # when parser.clear_old_matches() is called
+        parser = MatchParser(user=self.user, store_limit=settings.TEST_STORE_LIMIT)
+        parser.clear_old_matches()
+        self.assertEqual(len(Match.objects.filter(user=self.user)), 5)
+        self.assertNotIn(match, Match.objects.filter(user=self.user))

@@ -5,16 +5,15 @@ from authentication.models import User
 from django.conf import settings
 
 
-@task()
-def update_matches(user_pk):
+def updateMatches(user_pk):
     user = User.objects.get(pk=user_pk)
     parser = MatchParser(user=user, store_limit=settings.MATCH_STORE_LIMIT)
     parser.get_matches()
     parser.parse_and_save()
     parser.clear_old_matches()
-    print('parsed and saved: '+ str(parser.total_parsed))
-    print('deleted: '+ str(parser.total_deleted))
-    return True
+    return parser.total_parsed, parser.total_deleted
 
-#@periodic_task(crontab(minute='0', hour='5'))
-#def update_all_matches():
+@task()
+def update_matches(user_pk):
+    updateMatches(user_pk)
+    return True

@@ -59,8 +59,9 @@ class MatchObj(object):
 
     def parse_dota_api_ids(self):
         self.data['game_mode'] = GameModeRules.get(self.data['game_mode'])
-        self.user_data['hero'] = get_hero(self.user_data['hero_id'])
-        self.user_data.pop('hero_id')
+        self.data['user_data']['hero'] = get_hero(self.data['user_data']['hero_id'])
+        self.data['user_data'].pop('hero_id')
+
     def parse_user_win(self):
         if self.data['user_data'].get('isRadiant') == True and self.data['radiant_win'] == True:
             self.data['user_win'] = True
@@ -79,12 +80,16 @@ class MatchObj(object):
     def save(self):
         Match(**dict(self.data)).save()
         return self.data
+
+        
 class MatchParser(object):
 
     def __init__(self, user, store_limit):
         self.user = user
         self.latest_match_id = self.get_latest_match_id()
         self.store_limit = store_limit
+        self.total_parsed = 0
+        self.total_deleted = 0
 
     def get_latest_match_id(self):
         try:
@@ -103,7 +108,6 @@ class MatchParser(object):
             requeries opendota and only necessary the fields the json are passed on.
         '''
         self.parsed = []
-        self.total_parsed = 0
         for i in self.matches:
             if i['match_id'] == self.latest_match_id:
                 break
@@ -124,17 +128,18 @@ class MatchParser(object):
             parsed_data = MatchObj(data=data)
             parsed_data.save()
 
+
     def clear_old_matches(self):
         if self.latest_match_id != None:
-            matches = Match.objects.filter(user=user, time_stamp__lt=now())
+            matches = Match.objects.filter(user=self.user, time_stamp__lt=now())
             count = matches.count()
             matches = list(matches)
             matches.reverse()
-            if len(matches) > settings.MATCH_STORE_LIMIT:
+            if len(matches) > self.store_limit:
                 for a in matches:
-                    if count != MATCH_STORE_LIMIT:
+                    if count != self.store_limit:
                         a.delete()
                         count = count - 1
+                        self.total_deleted = self.total_deleted + 1
                     else:
-                        self.total_deleted = count
                         break
