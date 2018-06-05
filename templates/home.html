@@ -8,13 +8,9 @@
 
  <body>
  <div id="react"></div>
- {% if user.is_authenticated %}
      <a href="{% url "auth:logout" %}">Logout</a>
      <br>
      Hello, {{ user.personaname }}
- {% else %}
-     <a href="{% url "social:begin" "steam" %}">Sign in with Steam</a>
- {% endif %}
  {% render_bundle 'main' %}
  </body>
 </html>

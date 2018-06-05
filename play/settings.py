@@ -151,8 +151,8 @@ SOCIAL_AUTH_STEAM_API_KEY = data.steam_key
 # Fetch extra information about the user from the steam web api
 SOCIAL_AUTH_STEAM_EXTRA_DATA = ['player']
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/home'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login'
 
 DOTA_API_URL = 'https://api.opendota.com/api/'
 AUTH_USER_MODEL = 'authentication.User'
