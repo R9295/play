@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'huey.contrib.djhuey',
+    'webpack_loader',
     'social_django',
     'authentication',
     'play',
@@ -138,7 +139,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATICFILES_DIR = [
+    BASE_DIR + '/play/static/'
+]
+#STATIC_ROOT = BASE_DIR + '/static/'
 # Social auth settings
 # Besides the following, changes were made to AUTHENTICATION_BACKENDS, TEMPLATES and INSTALLED_APPS
 
@@ -212,4 +216,12 @@ HUEY = {
         'scheduler_interval': 2,
     },
 
+}
+
+# WEBPACk
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
 }
