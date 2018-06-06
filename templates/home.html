@@ -4,13 +4,20 @@
  <head>
  <meta charset="UTF-8">
  <title>Example</title>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+ integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+ <script>
+  window.props = JSON.parse('{{ matches|safe }}');
+  window.react_mount = document.getElementById('react');
+</script>
  </head>
 
  <body>
- <div id="react"></div>
      <a href="{% url "auth:logout" %}">Logout</a>
      <br>
      Hello, {{ user.personaname }}
+     <div id="react" class="container"></div>
+
  {% render_bundle 'main' %}
  </body>
 </html>
