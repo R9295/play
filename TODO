@@ -3,5 +3,4 @@ as parsing can only begin after they've verified with opendota.
 
 x. Make sure users know to visit opendota to get their matches parsed if they aren't seeing their latest ones.
 
-x. Find a way to test parser's delete_old_matches function( idea: remove the first match from the json response for the first parse run
-and run it again to make it seem as if the match was new )
+x. Fix reactstrap source errors for bootstrap js files (check js console)
