@@ -5,7 +5,10 @@ var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   context: __dirname,
 
-  entry: './play/static/js/index',
+  entry: {
+        home:'./play/static/js/index',
+        players:'./play/static/js/players'
+  },
 
   output: {
       path: path.resolve('./play/static/bundles/'),

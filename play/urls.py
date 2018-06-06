@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from .views import HomeView
+from .views import HomeView, PlayersView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('', include('social_django.urls', namespace='social')),
     url('', include(('authentication.urls', 'authentication'), namespace='auth')),
-    url('home/', HomeView.as_view())
+    url('home/', HomeView.as_view()),
+    url('players/', PlayersView.as_view()),
 ]
