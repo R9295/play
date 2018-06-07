@@ -45,34 +45,24 @@ class MatchObj(object):
         self.parse()
 
     def parse_players(self):
-        #player = None
-        # finds the user
         self.data['radiant'] = []
         self.data['dire'] = []
         for player in self.data['players']:
+            player_data = {}
+            for i in player_field_list:
+                player_data[i] = player.get(i)
             if player['isRadiant'] == True:
-                self.data['radiant'].append(player)
+                self.data['radiant'].append(player_data)
             else:
-                self.data['dire'].append(player)
+                self.data['dire'].append(player_data)
         self.data.pop('players', None)
 
     def parse_dota_api_ids(self):
         self.data['game_mode'] = GameModeRules.get(self.data['game_mode'])
-
         for i in itertools.chain(self.data['radiant'], self.data['dire']):
             i['hero'] = get_hero(i.get('hero_id'))
             if i.get('hero_id'):
                 i.pop('hero_id')
-    #def parse_user_win(self):
-        # parse the win for the user we care about
-        #if self.data['user_data'].get('isRadiant') == True and self.data['radiant_win'] == True:
-        #    self.data['user_win'] = True
-        #elif self.data['user_data'].get('isRadiant') == False and self.data['radiant_win'] == False:
-        #    self.data['user_win'] = True
-        # set to false if conditions not met
-        #self.data.setdefault('user_win', 'False')
-    #    self.data.pop('radiant_win', None)
-    #    self.data['user_data'].pop('isRadiant', None)
 
     def parse(self):
         self.parse_players()

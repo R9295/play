@@ -7,7 +7,8 @@ def MatchSerializer(matches):
     for i in matches:
         match = model_to_dict(i)
         match['id'] = str(match['id'])
+        match.pop('radiant')
+        match.pop('dire')
         match['time_stamp'] = match['time_stamp'].strftime("%Y-%m-%d")
-        match['user_win'] = str(match['user_win'])
         match_list.append(match)
     return json.dumps(match_list)
