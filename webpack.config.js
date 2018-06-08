@@ -6,6 +6,7 @@ module.exports = {
   context: __dirname,
 
   entry: {
+        polyfill: 'babel-polyfill',
         home:'./play/static/js/index',
         players:'./play/static/js/players'
   },

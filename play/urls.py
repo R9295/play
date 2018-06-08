@@ -17,6 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from .views import HomeView, PlayersView
+from api.views import MatchApiView
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.register(r'matches', MatchApiView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,3 +30,4 @@ urlpatterns = [
     url('home/', HomeView.as_view()),
     url('players/', PlayersView.as_view()),
 ]
+urlpatterns += router.urls

@@ -4,7 +4,7 @@ from django.utils.timezone import now
 from django.conf import settings
 from .rules import GameModeRules, get_hero
 import itertools
-
+from .serializers import MatchSerializer
 player_field_list = [
     #'ability_upgrades_arr',
     'assists','camps_stacked','creeps_stacked','account_id','total_gold',
@@ -37,7 +37,7 @@ class MatchObj(object):
         players  (json array with player_data dicts)
         patch  (int)
         region (int)
-        user (django user instance)
+        user.pk (django user pk)
     }
     '''
     def __init__(self, data):
@@ -70,7 +70,12 @@ class MatchObj(object):
     #    self.parse_user_win()
 
     def save(self):
-        Match(**dict(self.data)).save()
+        serializer = MatchSerializer(data=dict(self.data))
+        if serializer.is_valid():
+            serializer.save()
+            print('saved')
+        else:
+            print(serializer.errors)
         return self.data
 
 
@@ -118,7 +123,7 @@ class MatchParser(object):
                 'players': match['players'],
                 'patch': match['patch'],
                 'region': match['region'],
-                'user': self.user
+                'user': str(self.user.pk)
             }
             parsed_data = MatchObj(data=data)
             parsed_data.save()
