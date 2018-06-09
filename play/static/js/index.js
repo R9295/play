@@ -9,22 +9,18 @@ class Matches extends React.Component {
     super(props);
     this.state = {matches: [], loading: true}
   }
-
   async getMatches(){
-    let matches = await fetch('/matches');
+    let matches = await fetch('/api/v1/matches');
     let json = await matches.json();
     this.setState({
       matches: json,
       loading: false,
     })
   }
-
   componentWillMount(){
     this.getMatches()
   }
-
   render () {
-    console.log(this.state)
       if (this.state.loading){
         return <h1>LOADING</h1>
       }
@@ -33,7 +29,6 @@ class Matches extends React.Component {
                             match={ item }/> )}</Row> ;
       }
   }
-
 }
 
 class Match extends React.Component {
@@ -45,11 +40,11 @@ class Match extends React.Component {
          <CardTitle>{ this.props.match.match_id }</CardTitle>
          <div align="center">
          <CardSubtitle>Radiant</CardSubtitle>
-         <Teams match = {this.props.match} team="radiant" />
+         <Teams match={this.props.match} team="radiant" />
          </div>
          <div>
          <CardSubtitle>Dire</CardSubtitle>
-         <CardText>"Some quick example text to build on the card title and make up the bulk of the card's content"</CardText>
+         <Teams match={this.props.match} team="dire" />
          </div>
        </CardBody>
      </Card>
@@ -60,16 +55,18 @@ class Match extends React.Component {
 
 class Teams extends React.Component {
   render () {
-    return (
-      <div>
-      <script>
-      console.log('123')
-      </script>
+    return <div>{this.props.match[this.props.team].map(player =><Player hero={ player.hero } key={ player.hero }/> )} </div>;
+  }
+}
 
-      </div>
+class Player extends React.Component {
+  render() {
+    return (
+      <h2> { this.props.hero }</h2>
     )
   }
 }
+
 ReactDOM.render(
   <Matches />,
   document.getElementById('react')

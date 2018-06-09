@@ -6,7 +6,6 @@ from .rules import GameModeRules, get_hero
 import itertools
 from .serializers import MatchSerializer
 player_field_list = [
-    #'ability_upgrades_arr',
     'assists','camps_stacked','creeps_stacked','account_id','total_gold',
     #'damage',
     #'damage_inflictor',

@@ -1,3 +1,4 @@
+{% load static %}
 {% load render_bundle from webpack_loader %}
 <!DOCTYPE html>
 <html>
@@ -6,14 +7,12 @@
  <title>Example</title>
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
  integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
- <script>
-  window.props = JSON.parse('{{ players|safe }}');
-</script>
  </head>
 
  <body>
      <a href="{% url "auth:logout" %}">Logout</a>
      <div id="players" class="container"></div>
+ {% render_bundle 'polyfill' %}
  {% render_bundle 'players' %}
  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
   integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>

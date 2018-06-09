@@ -1,14 +1,12 @@
-from django.forms.models import model_to_dict
-import datetime
-import json
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from authentication.models import User
 
-def UserSerializer(users):
-    user_list = []
-    for i in users:
-        user = model_to_dict(i)
-        user['id'] = str(user['id'])
-        user.pop('password', None)
-        user['date_joined'] = user['date_joined'].strftime("%Y-%m-%d")
-        user['last_login'] = user['last_login'].strftime("%Y-%m-%d")
-        user_list.append(user)
-    return json.dumps(user_list)
+class UsrSerializer(ModelSerializer):
+    dota_id = SerializerMethodField()
+
+    def get_dota_id(self, obj):
+        return obj.dotaid
+
+    class Meta:
+        model = User
+        fields = ['personaname', 'pk', 'last_login', 'date_joined', 'profileurl', 'avatarfull', 'dota_id']
