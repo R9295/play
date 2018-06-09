@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'play',
     'matches',
     'api',
+    'user_profile',
 ]
 
 MIDDLEWARE = [
