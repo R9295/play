@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
+import uuid
 class UserManager(BaseUserManager):
     def _create_user(self, steamid, password, **extra_fields):
         """
@@ -39,6 +39,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     USERNAME_FIELD = 'steamid'
+    id = models.UUIDField(primary_key = True, default=uuid.uuid4)
     steamid = models.CharField(max_length=17, unique=True)
     personaname = models.CharField(max_length=255)
     profileurl = models.CharField(max_length=300)

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'authentication',
     'play',
     'matches',
+    'api',
 ]
 
 MIDDLEWARE = [
