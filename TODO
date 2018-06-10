@@ -1,8 +1,5 @@
-x. add field 'opendota verified' to model user which is a BooleanField that explains if the user has registered with opendota or not,
-as parsing can only begin after they've verified with opendota.
-
 x. Make sure users know to visit opendota to get their matches parsed if they aren't seeing their latest ones.
 
 x. Fix reactstrap source errors for bootstrap js files (check js console)
 
-x. Find a key for all players rendered in the class Player in index.js
+x. Make sure user profiles aren't created before user is opendota verified

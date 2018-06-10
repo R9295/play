@@ -3,7 +3,6 @@ from authentication.models import User
 
 class UsrSerializer(ModelSerializer):
     dota_id = SerializerMethodField()
-
     def get_dota_id(self, obj):
         return obj.dotaid
 

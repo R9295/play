@@ -7,12 +7,17 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
  integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
  </head>
-
+ <script>
+  window.props = {
+    'user': '{{ user }}',
+    'csrf_token':"{{ csrf_token }}",
+  }
+ </script>
  <body>
      <a href="{% url "auth:logout" %}">Logout</a>
-     <div id="players" class="container"></div>
+     <div id="form" class="container" align="center"></div>
  {% render_bundle 'polyfill' %}
- {% render_bundle 'players' %}
+ {% render_bundle 'profile' %}
  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
   integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"

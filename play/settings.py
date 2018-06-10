@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'huey.contrib.djhuey',
     'webpack_loader',
+    'rest_framework',
     'social_django',
     'authentication',
     'play',

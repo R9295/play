@@ -8,7 +8,8 @@ module.exports = {
   entry: {
         polyfill: 'babel-polyfill',
         home:'./play/static/js/index',
-        players:'./play/static/js/players'
+        players:'./play/static/js/players',
+        profile:'./play/static/js/profile'
   },
 
   output: {
