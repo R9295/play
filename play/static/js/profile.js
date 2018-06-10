@@ -40,8 +40,6 @@ class ProfileForm extends React.Component {
       loading: false,
     })
   }
-
-
   componentWillMount(){
     this.getOptions()
   }
@@ -63,10 +61,13 @@ class ProfileForm extends React.Component {
     }
   }
   handleErrors(errors){
-    document.getElementById('response').removeAttribute("hidden")
+    document.getElementById('success').hidden = true
+    document.getElementById('error').removeAttribute("hidden")
+    console.log(errors)
   }
   handleSuccess(success){
-    console.log(success)
+    document.getElementById('error').hidden = true
+    document.getElementById('success').removeAttribute("hidden")
   }
   render () {
       if (this.state.loading){
@@ -74,7 +75,8 @@ class ProfileForm extends React.Component {
       } else {
         return (
           <Form onSubmit={this.handleSubmit}>
-          <Alert color="danger" hidden id="response">  { this.state.errors }</Alert>
+          <Alert color="danger" hidden id="error">  { this.state.errors }</Alert>
+          <Alert color="success" hidden id="success">Your profile was succesfully updated</Alert>
           <Col sm="6" lg="6" md="6">
           <Input type="hidden" name="user" value={window.props.user} />
           <Input type="hidden" name="csrfmiddlewaretoken" value={window.props.csrf_token} />

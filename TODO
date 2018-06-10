@@ -3,3 +3,9 @@ x. Make sure users know to visit opendota to get their matches parsed if they ar
 x. Fix reactstrap source errors for bootstrap js files (check js console)
 
 x. Make sure user profiles aren't created before user is opendota verified
+
+x. handle user profile serializer errors in profile.js
+
+x. remove hardcoded urls and dynamically build them with reverse in tests
+
+x. make sure all errors generated in user_profile.serializers.UserProfileSerializer are squashed into one_dict

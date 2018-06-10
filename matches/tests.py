@@ -26,6 +26,7 @@ class MatchTestCase(TestCase):
         parser.parse_and_save()
         self.assertEqual(Match.objects.filter(user=self.user).count(), 5)
 
+    @skip
     def test_clear_old_matches(self):
         parser = MatchParser(user=self.user,store_limit=settings.TEST_STORE_LIMIT + 1)
         parser.get_matches()
