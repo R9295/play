@@ -42,3 +42,8 @@ class UserProfileSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
+        extra_kwargs = {
+            'user': {
+                'write_only': True,
+            }
+        }

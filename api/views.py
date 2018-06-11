@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from matches.models import Match
 from matches.serializers import MatchSerializer
-from authentication.serializers import UsrSerializer
+from authentication.serializers import UserSerializer
 from authentication.models import User
 from user_profile.models import Server, Role, Hero, UserProfile
 from user_profile.serializers import ServerSerializer, RoleSerializer, UserProfileSerializer, HeroSerializer
@@ -17,16 +17,7 @@ class MatchApiView(ReadOnlyModelViewSet):
 
 class UserApiView(ReadOnlyModelViewSet):
     queryset = User.objects.filter(opendota_verified=True)
-    serializer_class = UsrSerializer
-
-    @action(methods=['GET'], detail=True)
-    def profile(self, request, pk=None):
-        try:
-            profile = UserProfile.objects.get(user=pk)
-        except (ValidationError, UserProfile.DoesNotExist):
-            return Response({'error':'This user does not have a profile'})
-        serializer = UserProfileSerializer(profile)
-        return Response(serializer.data)
+    serializer_class = UserSerializer
 
 class ServerApiView(ReadOnlyModelViewSet):
     queryset = Server.objects.all()

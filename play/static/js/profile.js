@@ -22,9 +22,10 @@ class ProfileForm extends React.Component {
     roles = await roles.json()
 
     // get old profile if exists
-    let profile = await fetch('/api/v1/users/'+window.props.user+'/profile')
+    let profile = await fetch('/api/v1/users/'+window.props.user)
     profile = await profile.json()
-    if (!profile.error){
+    profile = profile.profile
+    if (profile != 'None'){
       this.setState({
         selected: {
           servers: profile.fav_servers,
