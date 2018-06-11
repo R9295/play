@@ -7,7 +7,7 @@ class ProfileForm extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {error: '', success: false, loading: true, errors:[], selected: {}}
+    this.state = {profile_pk: '', update: false, loading: true,status: null, response:[], selected: {}}
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -30,7 +30,10 @@ class ProfileForm extends React.Component {
           servers: profile.fav_servers,
           heroes: profile.fav_heroes,
           roles: profile.fav_roles,
-        }
+        },
+        update: true,
+        // set profile_pk if there is a profile so that the url can be built to update.
+        profile_pk: profile.id
       })
     }
     this.setState({
@@ -39,48 +42,76 @@ class ProfileForm extends React.Component {
       heroes: heroes,
       loading: false,
     })
+    document.getElementById('response').style.visibility = "hidden";
   }
   componentWillMount(){
     this.getOptions()
   }
   async handleSubmit(event){
     event.preventDefault();
+    let f = {}
     let data = new FormData(event.target);
-    let response = await fetch('/api/v1/profile/',{
-      method: 'POST',
-      body: data
+    // construct url to either update or create instance
+    const url = this.state.update ? '/api/v1/profile/'+this.state.profile_pk+'/' : '/api/v1/profile/'
+    const method = this.state.update  ? 'PUT' : 'POST'
+    let response = await fetch(url,{
+      method: method,
+      body: data,
+      headers: {
+        'X-CSRFToken': window.props.csrf_token
+      }
     })
     let json = await response.json()
-    if (response.status == 400){
-      // if serializer error
+    // if serializer returns an error
+    if (response.status === 400){
+  //    console.log(response.status)
       this.handleErrors(json)
     }
-    if (response.status == 201) {
-      // if successs
+    // if success
+    if (response.status === 201 || response.status === 200) {
+      if (!this.state.update){
+        // if it was a new instance, getOptions to update to new values
+        // and set state to update.
+        this.getOptions()
+      }
       this.handleSuccess(json)
     }
   }
   handleErrors(errors){
-    document.getElementById('success').hidden = true
-    document.getElementById('error').removeAttribute("hidden")
-    console.log(errors)
+    // clear response first
+    this.setState({
+        response: [],
+        status: "error",
+    })
+    // append all errors
+    Object.keys(errors).forEach(key => this.setState(
+      {
+        response: [...this.state.response, errors[key][0]]
+      }
+    ))
+    document.getElementById('response').style.visibility = "visible";
   }
   handleSuccess(success){
-    document.getElementById('error').hidden = true
-    document.getElementById('success').removeAttribute("hidden")
+    this.setState({
+        response: this.state.update ? ['Successfully updated your profile'] : ['Successfully created your profile'],
+        status: "success",
+    })
+    document.getElementById('response').style.visibility = "visible";
   }
   render () {
+    //{this.state.response.forEach(item => <h6>{ item }</h6>)}
+      //this.state.response.forEach(item => console.log(item))
       if (this.state.loading){
         return  <h1> LOADING </h1>
       } else {
         return (
-          <Form onSubmit={this.handleSubmit}>
-          <Alert color="danger" hidden id="error">  { this.state.errors }</Alert>
-          <Alert color="success" hidden id="success">Your profile was succesfully updated</Alert>
+          <div>
+            <div id="response">
+              <Alert color={this.state.status=="success" ? 'success':'danger'}>{ this.state.response.map(item => <h6 key={item}>{item}</h6>)}</Alert>
+            </div>
+          <Form onSubmit={this.handleSubmit} id="form" encType="multipart/form-data">
           <Col sm="6" lg="6" md="6">
           <Input type="hidden" name="user" value={window.props.user} />
-          <Input type="hidden" name="csrfmiddlewaretoken" value={window.props.csrf_token} />
-
           <FormGroup>
             <Label for="fav_servers">Preferred Servers</Label>
             <Input type="select" name="fav_servers" id="fav_servers" multiple defaultValue={this.state.selected.servers}>
@@ -90,14 +121,14 @@ class ProfileForm extends React.Component {
 
           <FormGroup>
             <Label for="fav_heroes">Preferred Heroes</Label>
-            <Input type="select" name="fav_heroes" id="fav_heroes" multiple>
+            <Input type="select" name="fav_heroes" id="fav_heroes" multiple defaultValue={this.state.selected.heroes}>
             {this.state.heroes.map(item => <Option key={ item.id } id={ item.id } name={ item.name }/> )}
             </Input>
           </FormGroup>
 
           <FormGroup>
             <Label for="fav_roles">Preferred Roles</Label>
-            <Input type="select" name="fav_roles" id="fav_roles" multiple>
+            <Input type="select" name="fav_roles" id="fav_roles" multiple defaultValue={this.state.selected.roles}>
             {this.state.roles.map(item => <Option  key={ item.id } id={ item.id } name={ item.name }/> )}
             </Input>
           </FormGroup>
@@ -105,6 +136,7 @@ class ProfileForm extends React.Component {
           </Col>
           <Button> Save </Button>
           </Form>
+          </div>
         )
     }
   }
@@ -113,10 +145,11 @@ class ProfileForm extends React.Component {
 class Option extends React.Component {
   render () {
     return (
-      <option value={ this.props.id } key={this.props.id}>{ this.props.name }</option>
+      <option value={ this.props.id } key={ this.props.id }>{ this.props.name }</option>
     )
   }
 }
+
 ReactDOM.render(
   <ProfileForm />,
   document.getElementById('form')

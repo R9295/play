@@ -4,7 +4,7 @@ from authentication.models import User
 from django.db.utils import IntegrityError
 from .serializers import UserProfileSerializer
 from django.test import Client
-
+import json
 c = Client()
 class UserProfileTestCase(TestCase):
     @classmethod
@@ -62,30 +62,30 @@ class UserProfileTestCase(TestCase):
         profile_data = {
             'user': self.user.id,
             'fav_servers': [1,2,3,4],
-            'fav_roles':[1,2,3],
-            'fav_heroes':[1,2,3],
-        }
-        res = c.post('/api/v1/profile/', profile_data, follow=True)
-        self.assertEqual(res.json()['fav_servers'][0], 'Too many servers selected, maximum is 3')
-
-    def test_heroes_over_limit(self):
-        c.force_login(user=self.user)
-        profile_data = {
-            'user': self.user.id,
-            'fav_servers': [1,2,3],
-            'fav_roles':[1,2,3],
+            'fav_roles':[1,2,3,4],
             'fav_heroes':[1,2,3,4,5,6],
         }
         res = c.post('/api/v1/profile/', profile_data, follow=True)
+        self.assertEqual(res.json()['fav_servers'][0], 'Too many servers selected, maximum is 3')
         self.assertEqual(res.json()['fav_heroes'][0], 'Too many heroes selected, maximum is 5')
-
-    def test_roles_over_limit(self):
-        c.force_login(user=self.user)
-        profile_data = {
-            'user': self.user.id,
-            'fav_servers': [1,2,3],
-            'fav_roles':[1,2,3,4],
-            'fav_heroes':[1,2,3],
-        }
-        res = c.post('/api/v1/profile/', profile_data, follow=True)
         self.assertEqual(res.json()['fav_roles'][0], 'Too many roles selected, maximum is 3')
+
+    def test_put(self):
+        #c.force_login(user=self.user)
+        profile_data = {
+            "user": str(self.user.id),
+            "fav_servers": [1],
+            "fav_roles":[1],
+            "fav_heroes":[1,2],
+        }
+        print(profile_data)
+        res = c.post('/api/v1/profile/', profile_data, follow=True)
+        profile_data = {
+            "user": str(self.user.id),
+            "fav_servers": [1,2],
+            "fav_roles":[1],
+            "fav_heroes":[1,2],
+        }
+        profile_data = json.dumps(profile_data)
+        res = c.put('/api/v1/profile/{}/'.format(res.json()['id']),profile_data, follow=True, content_type='application/json')
+        print(res.json())

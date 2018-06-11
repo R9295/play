@@ -17,24 +17,28 @@ class HeroSerializer(ModelSerializer):
 
 class UserProfileSerializer(ModelSerializer):
 
-    def validate(self, data):
-        if len(data['fav_servers']) > 3:
-            raise ValidationError({'fav_servers': ["Too many servers selected, maximum is 3"]})
-        if len(data['fav_heroes']) > 5:
-            raise ValidationError({'fav_heroes': ["Too many heroes selected, maximum is 5"]})
-        if len(data['fav_roles']) > 3:
-            raise ValidationError({'fav_roles': ["Too many roles selected, maximum is 3"]})
-        return data
+    def validate_fav_servers(self, value):
+        if len(value) > 3:
+            raise ValidationError("Too many servers selected, maximum is 3")
+        return value
 
-    def save(self, **kwargs):
-        # check if user saving is the one actually saving it
+    def validate_fav_heroes(self, value):
+        if len(value) > 5:
+            raise ValidationError("Too many heroes selected, maximum is 5")
+        return value
+
+    def validate_fav_roles(self, value):
+        if len(value) > 3:
+            raise ValidationError("Too many roles selected, maximum is 3")
+        return value
+    # check if the user is logged in
+    def validate_user(self, value):
         if self.context.get('request'):
-           if self.context['request'].user != self.validated_data.get('user'):
-                raise ValidationError("You do not have the permission to create or update resources")
+              if self.context['request'].user != value:
+                raise ValidationError("You do not have the permission to create or this resource")
         else:
-            raise ValidationError("Login maybe?")
-        return super().save(**kwargs)
-
+            raise ValidationError("Login?")
+        return value
     class Meta:
         model = UserProfile
         fields = '__all__'
