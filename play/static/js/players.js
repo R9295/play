@@ -28,7 +28,7 @@ class Players extends React.Component {
     if (!this.state.loading){
       let users = this.state.users
     return <div align="center">{users.map(item => <Player key={item.pk}
-                        personaname={item.personaname} img={item.avatarfull}/> )}</div>;
+                        personaname={item.personaname} img={item.avatarfull} /> )}</div>;
     }
   }
 }

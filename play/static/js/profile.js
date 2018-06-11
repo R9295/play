@@ -7,7 +7,7 @@ class ProfileForm extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {profile_pk: '', update: false, loading: true,status: null, response:[], selected: {}}
+    this.state = {update: false, loading: true,status: null, response:[], selected: {}}
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -25,7 +25,7 @@ class ProfileForm extends React.Component {
     let profile = await fetch('/api/v1/users/'+window.props.user)
     profile = await profile.json()
     profile = profile.profile
-    if (profile != 'None'){
+    if (profile != null){
       this.setState({
         selected: {
           servers: profile.fav_servers,
@@ -50,19 +50,30 @@ class ProfileForm extends React.Component {
   }
   async handleSubmit(event){
     event.preventDefault();
-    let f = {}
-    let data = new FormData(event.target);
+    let form_data = new FormData(event.target);
+    let data = {
+      user: window.props.user,
+      profile:{
+        csrf_token: form_data.getAll('csrf_token'),
+        fav_roles: form_data.getAll('fav_roles'),
+        fav_servers: form_data.getAll('fav_servers'),
+        fav_heroes: form_data.getAll('fav_heroes'),
+      }
+    }
+    data = JSON.stringify(data)
     // construct url to either update or create instance
-    const url = this.state.update ? '/api/v1/profile/'+this.state.profile_pk+'/' : '/api/v1/profile/'
-    const method = this.state.update  ? 'PUT' : 'POST'
+    const url = '/api/v1/users/'+window.props.user+'/profile/'
+    const method = 'POST'
     let response = await fetch(url,{
       method: method,
       body: data,
       headers: {
-        'X-CSRFToken': window.props.csrf_token
+        'X-CSRFToken': window.props.csrf_token,
+        'Content-Type': 'application/json'
       }
     })
     let json = await response.json()
+    console.log(json)
     // if serializer returns an error
     if (response.status === 400){
   //    console.log(response.status)
@@ -85,9 +96,9 @@ class ProfileForm extends React.Component {
         status: "error",
     })
     // append all errors
-    Object.keys(errors).forEach(key => this.setState(
+    Object.keys(errors.profile).forEach(key => this.setState(
       {
-        response: [...this.state.response, errors[key][0]]
+        response: [...this.state.response, errors.profile[key][0]]
       }
     ))
     document.getElementById('response').style.visibility = "visible";

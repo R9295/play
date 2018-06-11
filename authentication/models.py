@@ -3,6 +3,9 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 import uuid
+from user_profile.models import UserProfile
+
+
 class UserManager(BaseUserManager):
     def _create_user(self, steamid, password, **extra_fields):
         """
@@ -54,6 +57,7 @@ class User(AbstractBaseUser):
     last_login = models.DateTimeField(default=timezone.now)
     is_superuser = models.BooleanField(default=False)
     opendota_verified = models.BooleanField(default=False)
+    profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, null=True)
     objects = UserManager()
 
     def get_short_name(self):

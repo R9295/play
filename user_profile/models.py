@@ -13,7 +13,6 @@ class Role(models.Model):
 
 class UserProfile(models.Model):
     id = models.UUIDField(primary_key = True, default=uuid.uuid4)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
     fav_servers = models.ManyToManyField(Server)
     fav_heroes = models.ManyToManyField(Hero)
     fav_roles = models.ManyToManyField(Role)
