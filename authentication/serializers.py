@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField,PrimaryKeyRelatedField
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from authentication.models import User
 from user_profile.serializers import UserProfileSerializer
 from user_profile.models import UserProfile
@@ -7,7 +7,6 @@ from user_profile.models import UserProfile
 class UserSerializer(ModelSerializer):
     dota_id = SerializerMethodField()
     profile = UserProfileSerializer()
-
     def get_dota_id(self, obj):
         return obj.dotaid
 
@@ -25,4 +24,4 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = [ 'pk', 'last_login', 'date_joined', 'profileurl', 'avatarfull', 'dota_id', 'profile']
+        fields = ['personaname', 'pk', 'last_login', 'date_joined', 'profileurl', 'avatarfull', 'dota_id', 'profile']

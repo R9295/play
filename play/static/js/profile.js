@@ -127,21 +127,21 @@ class ProfileForm extends React.Component {
           <FormGroup>
             <Label for="fav_servers">Preferred Servers</Label>
             <Input type="select" name="fav_servers" id="fav_servers" multiple defaultValue={this.state.selected.servers}>
-            {this.state.servers.map(item => <Option key={ item.id } id={ item.id } name={ item.name } /> )}
+            {this.state.servers.map(item => <Option key={item.name} name={ item.name } /> )}
             </Input>
             </FormGroup>
 
           <FormGroup>
             <Label for="fav_heroes">Preferred Heroes</Label>
             <Input type="select" name="fav_heroes" id="fav_heroes" multiple defaultValue={this.state.selected.heroes}>
-            {this.state.heroes.map(item => <Option key={ item.id } id={ item.id } name={ item.name }/> )}
+            {this.state.heroes.map(item => <Option key={item.name} name={ item.name }/> )}
             </Input>
           </FormGroup>
 
           <FormGroup>
             <Label for="fav_roles">Preferred Roles</Label>
             <Input type="select" name="fav_roles" id="fav_roles" multiple defaultValue={this.state.selected.roles}>
-            {this.state.roles.map(item => <Option  key={ item.id } id={ item.id } name={ item.name }/> )}
+            {this.state.roles.map(item => <Option key={item.name} name={ item.name }/> )}
             </Input>
           </FormGroup>
 
@@ -157,7 +157,7 @@ class ProfileForm extends React.Component {
 class Option extends React.Component {
   render () {
     return (
-      <option value={ this.props.id } key={ this.props.id }>{ this.props.name }</option>
+      <option value={ this.props.name } key={ this.props.name }>{ this.props.name }</option>
     )
   }
 }

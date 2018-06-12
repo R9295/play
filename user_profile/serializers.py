@@ -1,5 +1,5 @@
 from .models import Server, Hero, Role, UserProfile
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError,SlugRelatedField
 class ServerSerializer(ModelSerializer):
     class Meta:
         model = Server
@@ -16,7 +16,23 @@ class HeroSerializer(ModelSerializer):
         fields = '__all__'
 
 class UserProfileSerializer(ModelSerializer):
+    fav_servers = SlugRelatedField(
+        many=True,
+        queryset=Server.objects.all(),
+        slug_field='name',
+    )
 
+    fav_roles = SlugRelatedField(
+        many=True,
+        queryset=Role.objects.all(),
+        slug_field='name',
+    )
+
+    fav_heroes = SlugRelatedField(
+        many=True,
+        queryset=Hero.objects.all(),
+        slug_field='name',
+    )
     def validate_fav_servers(self, value):
         if len(value) > 3:
             raise ValidationError("Too many servers selected, maximum is 3")
@@ -42,8 +58,3 @@ class UserProfileSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
-        extra_kwargs = {
-            'user': {
-                'write_only': True,
-            }
-        }

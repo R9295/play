@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button, Row, Col, CardLink } from 'reactstrap';
+  CardTitle, CardSubtitle, Button, Row, Col, CardLink,ListGroup, ListGroupItem } from 'reactstrap';
 
 class Players extends React.Component {
   constructor(props){
@@ -12,7 +12,6 @@ class Players extends React.Component {
   async getPlayers(){
     let players = await fetch('/api/v1/users');
     let json = await players.json()
-    console.log(json)
     this.setState({
       users: json,
       loading: false,
@@ -28,13 +27,14 @@ class Players extends React.Component {
     if (!this.state.loading){
       let users = this.state.users
     return <div align="center">{users.map(item => <Player key={item.pk}
-                        personaname={item.personaname} img={item.avatarfull} /> )}</div>;
+                        personaname={item.personaname} img={item.avatarfull} profile={item.profile} /> )}</div>;
     }
   }
 }
 
 class Player extends React.Component {
   render() {
+    //this.props.profile.fav_servers.forEach(item => console.log(item))
     return  (
       <Col md="6" lg="6" sm="6">
        <Card>
@@ -45,17 +45,16 @@ class Player extends React.Component {
          </CardBody>
          <CardBody>
          <br /><br />
-           <CardText>PROFILE DATA HERE </CardText>
+          < FavObj name='Preferred Servers' data={this.props.profile.fav_servers} />
+          < FavObj name='Preferred Heroes' data={this.props.profile.fav_heroes} />
+          < FavObj name='Preferred Roles' data={this.props.profile.fav_roles} />
            <br /> <br />
            <Row>
-           <Col md="4" lg="4" sm="4">
+           <Col md="6" lg="6" sm="6">
            <CardLink href="#">Invite</CardLink>
            </Col>
-           <Col md="4" lg="4" sm="4">
+           <Col md="6" lg="6" sm="6">
            <CardLink href="#">View Matches</CardLink>
-           </Col>
-           <Col md="4" lg="4" sm="4">
-           <CardLink href="#">View Profile</CardLink>
            </Col>
            </Row>
          </CardBody>
@@ -64,7 +63,18 @@ class Player extends React.Component {
    )
     }
 }
-
+class FavObj extends React.Component {
+  render(){
+    return (
+      <div>
+      <h6 align="left">{this.props.name}</h6>
+      <ListGroup>
+        {this.props.data.map(item =><ListGroupItem key={item}>{item}</ListGroupItem>)}
+      </ListGroup>
+      </div>
+    )
+  }
+}
 ReactDOM.render(
   <Players />,
   document.getElementById('players')
