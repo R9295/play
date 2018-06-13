@@ -54,13 +54,14 @@ class ProfileForm extends React.Component {
     let data = {
       user: window.props.user,
       profile:{
-        csrf_token: form_data.getAll('csrf_token'),
         fav_roles: form_data.getAll('fav_roles'),
         fav_servers: form_data.getAll('fav_servers'),
         fav_heroes: form_data.getAll('fav_heroes'),
       }
     }
+    console.log(data)
     data = JSON.stringify(data)
+
     // construct url to either update or create instance
     const url = '/api/v1/users/'+window.props.user+'/profile/'
     const method = 'POST'

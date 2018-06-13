@@ -57,4 +57,4 @@ class UserProfileSerializer(ModelSerializer):
         return value
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = ('fav_servers', 'fav_heroes', 'id', 'fav_roles')
