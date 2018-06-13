@@ -7,7 +7,6 @@ class Players extends React.Component {
   constructor(props){
     super(props);
     this.state = {users: [], loading:true}
-
   }
   async getPlayers(){
     let players = await fetch('/api/v1/users');
@@ -26,17 +25,25 @@ class Players extends React.Component {
     }
     if (!this.state.loading){
       let users = this.state.users
-    return <div align="center">{users.map(item => <Player key={item.pk}
-                        personaname={item.personaname} img={item.avatarfull} profile={item.profile} /> )}</div>;
+    return <div align="center"><Row>{users.map(item => <Player key={item.pk} id={item.pk}
+                        personaname={item.personaname} img={item.avatarfull} profile={item.profile} /> )}</Row></div>;
     }
   }
 }
 
 class Player extends React.Component {
+  constructor(props){
+    super(props);
+    this.invite = this.invite.bind(this);
+    this.state = {id: this.props.id }
+  }
+  invite(){
+    
+  }
   render() {
     //this.props.profile.fav_servers.forEach(item => console.log(item))
     return  (
-      <Col md="6" lg="6" sm="6">
+      <Col md="4" lg="4" sm="4">
        <Card>
          <CardBody>
            <CardTitle>{ this.props.personaname }</CardTitle>
@@ -51,7 +58,7 @@ class Player extends React.Component {
            <br /> <br />
            <Row>
            <Col md="6" lg="6" sm="6">
-           <CardLink href="#">Invite</CardLink>
+           <CardLink href="#" onClick={this.invite}>Invite</CardLink>
            </Col>
            <Col md="6" lg="6" sm="6">
            <CardLink href="#">View Matches</CardLink>

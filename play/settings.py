@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'matches',
     'api',
     'user_profile',
+    'invites',
 ]
 
 MIDDLEWARE = [
