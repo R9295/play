@@ -60,8 +60,4 @@ class InviteApiView(ModelViewSet):
 
     def get_queryset(self):
         invites = Invite.objects.filter(Q(user_from=self.request.user) | Q(user_to=self.request.user))
-        if self.request.query_params.get('user_from') and self.request.query_params.get('user_from') == str(self.request.user.pk):
-            invites = Invite.objects.filter(user_from=self.request.query_params.get('user_from'))
-        if self.request.query_params.get('user_to') and self.request.query_params.get('user_to') == str(self.request.user.pk):
-            invites = Invite.objects.filter(user_to=self.request.query_params.get('user_to'))
         return invites

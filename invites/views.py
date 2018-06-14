@@ -9,4 +9,5 @@ class InviteView(LoginRequiredMixin, TemplateView):
     def get_context_data(self):
         context = super().get_context_data()
         context['user'] = str(self.request.user.pk)
+        context['user_slug'] = self.request.user.personaname
         return context
