@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.core.exceptions import ValidationError
 from rest_framework import status
+from django.db.models import Q
 
 
 class MatchApiView(ReadOnlyModelViewSet):
@@ -58,4 +59,9 @@ class InviteApiView(ModelViewSet):
     serializer_class = InviteSerializer
 
     def get_queryset(self):
-        return Invite.objects.filter(user_from=self.request.user)
+        invites = Invite.objects.filter(Q(user_from=self.request.user) | Q(user_to=self.request.user))
+        if self.request.query_params.get('user_from') and self.request.query_params.get('user_from') == str(self.request.user.pk):
+            invites = Invite.objects.filter(user_from=self.request.query_params.get('user_from'))
+        if self.request.query_params.get('user_to') and self.request.query_params.get('user_to') == str(self.request.user.pk):
+            invites = Invite.objects.filter(user_to=self.request.query_params.get('user_to'))
+        return invites

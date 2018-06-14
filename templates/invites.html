@@ -1,0 +1,25 @@
+{% load render_bundle from webpack_loader %}
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="UTF-8">
+ <title>Example</title>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+ integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+ </head>
+ <script>
+ window.props = {
+    'user': '{{user}}'
+ }
+ </script>
+
+ <body>
+     <a href="{% url "auth:logout" %}">Logout</a>
+     <br>
+     Hello, {{ user.personaname }}
+     <div id="react" class="container"></div>
+
+ {% render_bundle 'polyfill' %}
+ {% render_bundle 'invites' %}
+ </body>
+</html>

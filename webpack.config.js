@@ -9,7 +9,8 @@ module.exports = {
         polyfill: 'babel-polyfill',
         home:'./play/static/js/index',
         players:'./play/static/js/players',
-        profile:'./play/static/js/profile'
+        profile:'./play/static/js/profile',
+        invites:'./play/static/js/invites',
   },
 
   output: {

@@ -27,4 +27,5 @@ urlpatterns = [
     url('players/', PlayersView.as_view()),
     url('api/v1/', include(('api.urls', 'api'), namespace='api')),
     url('user/profile/', include(('user_profile.urls', 'user_profile'), namespace='user_profile')),
+    url('user/invites/', include(('invites.urls', 'invites'), namespace='invites')),
 ]
